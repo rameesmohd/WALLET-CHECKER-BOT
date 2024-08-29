@@ -14,8 +14,8 @@ const WEBAPP_URL = process.env.WEBAPP_URL;
 const ENCRYPTION_KEY = process.env.ENCRYPTION_KEY;
 
 const rateLimiter = new RateLimiterMemory({
-  points: 15, // Number of points
-  duration: 20 * 60, // 20 minutes
+  points: 15, 
+  duration: 20 * 60, 
 });
 
 bot.use(async (ctx, next) => {
@@ -38,55 +38,9 @@ function encryptData(data) {
 //   return next();
 // });
 
-const MAX_SIZE = 2000;
-const GlobalStoreReferralCodes = new Map();
-
-function addReferralCode(userId, referralCode) {
-  if (GlobalStoreReferralCodes.size >= MAX_SIZE) {
-    const oldestKey = GlobalStoreReferralCodes.keys().next().value;
-    GlobalStoreReferralCodes.delete(oldestKey);
-  }
-  
-  GlobalStoreReferralCodes.set(userId, referralCode);
-}
-
-function getReferralCode(userId) {
-  return GlobalStoreReferralCodes.get(userId) || null;
-}
 
 bot.start((ctx) => {
   try {
-    const args = ctx.message.text.split(' ');
-    let referralCode = null;
-    
-    if (args.length > 1) {
-      referralCode = args[1];
-      addReferralCode(ctx.from.id,referralCode)
-    } else {
-      referralCode = getReferralCode(ctx.from.id) || null
-    }
-
-    const userId = ctx.from.id;
-    const username = ctx.from.username || 'Unknown';
-    const first_name = ctx.from.first_name || 'Unknown';
-
-    const dataToEncrypt = {
-      user_id: userId,
-      username,
-      first_name,
-      inviter_code: referralCode ? referralCode : '',
-    };
-    
-    const encryptedData = encryptData(dataToEncrypt);
-    const webAppUrlWithParams = `${WEBAPP_URL}?data=${encodeURIComponent(encryptedData)}`;
-    
-    console.log(GlobalStoreReferralCodes , ': GlobalStoreReferralCodes');
-    // console.log(webAppUrlWithParams);
-    // console.log('Referral Code:', referralCode);
-
-    const caption = `
-    `.trim();
-    
     ctx.replyWithPhoto(
      'https://repository-images.githubusercontent.com/813960882/7119d501-f157-40ea-b416-a1c3a72239f5' ,
       {
@@ -94,7 +48,7 @@ bot.start((ctx) => {
         parse_mode: 'MarkdownV2',
         ...Markup.inlineKeyboard([
           [
-            Markup.button.webApp('Open App', webAppUrlWithParams)        
+            Markup.button.webApp('Open App', WEBAPP_URL)        
           ],
           // [
           //   Markup.button.url('ℹ What is GEN?','https://telegra.ph/GEN-COIN-07-18')
@@ -115,8 +69,7 @@ bot.start((ctx) => {
 const app = express();
 app.use(express.json()); 
 
-const PORT = process.env.PORT || 3000
-
+const PORT = process.env.PORT || 5000
 
 app.listen(PORT, () => {
   try {
