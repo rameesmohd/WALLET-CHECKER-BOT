@@ -1,0 +1,27 @@
+{
+  "name": "mining-bot",
+  "version": "1.0.0",
+  "description": "",
+  "type": "commonjs",
+  "main": "bot.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon bot.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.7.2",
+    "axios-retry": "^4.4.1",
+    "crypto-js": "^4.2.0",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2",
+    "node-cron": "^3.0.3",
+    "nodemon": "^3.1.4",
+    "pm2": "^5.4.2",
+    "rate-limiter-flexible": "^5.0.3",
+    "telegraf": "^4.16.3",
+    "telegraf-ratelimit": "^2.0.0"
+  }
+}
